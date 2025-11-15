@@ -1,0 +1,28 @@
+{
+  "name": "ja-data-entry",
+  "version": "1.0.0",
+  "description": "Dynamic JSON data entry API with Cassandra NoSQL database using DDD architecture",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "keywords": [
+    "data-entry",
+    "cassandra",
+    "nosql",
+    "json"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cassandra-driver": "^4.7.2",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

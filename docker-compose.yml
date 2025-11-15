@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # Cassandra Database
+  cassandra:
+    image: cassandra:4.1
+    container_name: ja-cassandra
+    ports:
+      - "9042:9042"
+    environment:
+      - CASSANDRA_CLUSTER_NAME=DataEntryCluster
+      - CASSANDRA_DC=datacenter1
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+    volumes:
+      - cassandra_data:/var/lib/cassandra
+    healthcheck:
+      test: ["CMD-SHELL", "cqlsh -e 'describe cluster'"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    networks:
+      - data-entry-network
+
+  # Data Entry API
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ja-data-entry-api
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - CASSANDRA_CONTACT_POINTS=cassandra
+      - CASSANDRA_LOCAL_DATA_CENTER=datacenter1
+      - CASSANDRA_KEYSPACE=data_entry
+      - NODE_ENV=production
+    depends_on:
+      cassandra:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - data-entry-network
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  cassandra_data:
+    driver: local
+
+networks:
+  data-entry-network:
+    driver: bridge
