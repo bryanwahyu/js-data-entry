@@ -1,6 +1,14 @@
 // API Controller: Data Entry Controller
 const CreateDataEntryRequest = require('../../../application/dtos/CreateDataEntryRequest');
 
+const MAX_LIMIT = 1000;
+
+function parseLimit(value) {
+  const n = parseInt(value, 10);
+  if (!Number.isInteger(n) || n < 1) return 100;
+  return Math.min(n, MAX_LIMIT);
+}
+
 class DataEntryController {
   constructor(
     createDataEntryUseCase,
@@ -73,7 +81,7 @@ class DataEntryController {
 
   async getAll(req, res) {
     try {
-      const limit = parseInt(req.query.limit) || 100;
+      const limit = parseLimit(req.query.limit);
       const pageState = req.query.pageState || null;
       
       const result = await this.getAllDataEntriesUseCase.execute(limit, pageState);
@@ -107,7 +115,7 @@ class DataEntryController {
   async getByType(req, res) {
     try {
       const { type } = req.params;
-      const limit = parseInt(req.query.limit) || 100;
+      const limit = parseLimit(req.query.limit);
       const result = await this.getDataEntriesByTypeUseCase.execute(type, limit);
 
       if (result.success) {
@@ -134,7 +142,7 @@ class DataEntryController {
   async getByCategory(req, res) {
     try {
       const { category } = req.params;
-      const limit = parseInt(req.query.limit) || 100;
+      const limit = parseLimit(req.query.limit);
       const result = await this.getDataEntriesByCategoryUseCase.execute(category, limit);
 
       if (result.success) {
@@ -161,7 +169,7 @@ class DataEntryController {
   async getByClient(req, res) {
     try {
       const { clientId } = req.params;
-      const limit = parseInt(req.query.limit) || 100;
+      const limit = parseLimit(req.query.limit);
       const result = await this.getDataEntriesByClientUseCase.execute(clientId, limit);
 
       if (result.success) {
@@ -188,7 +196,7 @@ class DataEntryController {
   async getByClientAndCategory(req, res) {
     try {
       const { clientId, category } = req.params;
-      const limit = parseInt(req.query.limit) || 100;
+      const limit = parseLimit(req.query.limit);
       const result = await this.getDataEntriesByClientAndCategoryUseCase.execute(clientId, category, limit);
 
       if (result.success) {
