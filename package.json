@@ -1,11 +1,12 @@
 {
-  "name": "ja-data-entry",
+  "name": "js-data-entry",
   "version": "1.0.0",
-  "description": "Dynamic JSON data entry API with Cassandra NoSQL database using DDD architecture",
+  "description": "Schemaless JSON entry API on Cassandra with query-first tables and a DDD layout",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "test": "node --test test/"
   },
   "keywords": [
     "data-entry",
@@ -13,7 +14,7 @@
     "nosql",
     "json"
   ],
-  "author": "",
+  "author": "bryan wahyu <bryanwahyukp95@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
@@ -24,5 +25,12 @@
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bryanwahyu/js-data-entry.git"
   }
 }

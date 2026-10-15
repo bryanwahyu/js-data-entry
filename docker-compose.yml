@@ -1,10 +1,8 @@
-version: '3.8'
-
 services:
   # Cassandra Database
   cassandra:
     image: cassandra:4.1
-    container_name: ja-cassandra
+    container_name: js-cassandra
     ports:
       - "9042:9042"
     environment:
@@ -27,7 +25,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: ja-data-entry-api
+    container_name: js-data-entry-api
     ports:
       - "3000:3000"
     environment:
