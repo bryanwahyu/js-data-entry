@@ -1,5 +1,5 @@
 // API Controller: Data Entry Controller
-const CreateDataEntryRequest = require('../../application/dtos/CreateDataEntryRequest');
+const CreateDataEntryRequest = require('../../../application/dtos/CreateDataEntryRequest');
 
 class DataEntryController {
   constructor(
