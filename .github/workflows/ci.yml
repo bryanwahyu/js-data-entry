@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [18, 20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm test
+
+  cassandra:
+    runs-on: ubuntu-latest
+    services:
+      cassandra:
+        image: cassandra:4.1
+        ports: ["9042:9042"]
+        options: >-
+          --health-cmd "cqlsh -e 'describe cluster'"
+          --health-interval 10s --health-timeout 10s --health-retries 30
+    env:
+      CASSANDRA_CONTACT_POINTS: 127.0.0.1
+      CASSANDRA_LOCAL_DATA_CENTER: datacenter1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm test
